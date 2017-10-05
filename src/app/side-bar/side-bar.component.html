@@ -1,0 +1,10 @@
+<div #sidebar class="list-group">
+  <a *ngFor="let page of pages;let idx = index;"
+      routerLink="{{page.link}}"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="clickLink(idx)"
+      class="list-group-item">
+      {{page.name}}
+    </a>
+</div>
