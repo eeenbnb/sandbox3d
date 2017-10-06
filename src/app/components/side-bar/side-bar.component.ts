@@ -1,4 +1,5 @@
 import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
+import { PageEventService } from '../../services/page-event/page-event.service'
 
 @Component({
   selector: 'app-side-bar',
@@ -8,6 +9,7 @@ import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 export class SideBarComponent implements OnInit {
   @ViewChild('sidebar') sidebar:ElementRef;
   beforeIndex:number = 0;
+  animeState:string = "";
   pages:any =[
     {
       link:"./",
@@ -20,15 +22,19 @@ export class SideBarComponent implements OnInit {
   ]
 
 
-  constructor() {}
+  constructor(public pageEvent:PageEventService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pageEvent.eventData.subscribe(()=>{
+      this.pageEvent.sendStateData(this.animeState);
+    })
+  }
 
   clickLink(index:number){
     if(index > this.beforeIndex){
-      console.log("down");
+      this.animeState = "slideInDown";
     }else{
-      console.log("up");
+      this.animeState = "slideInUp";
     }
     this.beforeIndex = index;
   }

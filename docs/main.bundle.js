@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"container-fluid padding\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-4\">\n      <app-side-bar></app-side-bar>\n    </div>\n    <div class=\"col-xs-12 col-md-8\">\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div>\n  <app-top-area></app-top-area>\n</div>\n<div class=\"container-fluid padding\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-4\">\n      <app-side-bar></app-side-bar>\n    </div>\n    <div class=\"col-xs-12 col-md-8\">\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -83,14 +83,20 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_view_3d_area_view_3d_area_component__ = __webpack_require__("../../../../../src/app/pages/view-3d-area/view-3d-area.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__side_bar_side_bar_component__ = __webpack_require__("../../../../../src/app/side-bar/side-bar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_side_bar_side_bar_component__ = __webpack_require__("../../../../../src/app/components/side-bar/side-bar.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home_component__ = __webpack_require__("../../../../../src/app/pages/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__directives_page_animation_page_animation_directive__ = __webpack_require__("../../../../../src/app/directives/page-animation/page-animation.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_top_area_top_area_component__ = __webpack_require__("../../../../../src/app/components/top-area/top-area.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
 
 
 
@@ -112,19 +118,261 @@ AppModule = __decorate([
         declarations: [
             __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
             __WEBPACK_IMPORTED_MODULE_4__pages_view_3d_area_view_3d_area_component__["a" /* View3dAreaComponent */],
-            __WEBPACK_IMPORTED_MODULE_5__side_bar_side_bar_component__["a" /* SideBarComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__pages_home_home_component__["a" /* HomeComponent */]
+            __WEBPACK_IMPORTED_MODULE_5__components_side_bar_side_bar_component__["a" /* SideBarComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__pages_home_home_component__["a" /* HomeComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__directives_page_animation_page_animation_directive__["a" /* PageAnimationDirective */],
+            __WEBPACK_IMPORTED_MODULE_9__components_top_area_top_area_component__["a" /* TopAreaComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* RouterModule */].forRoot(appRoutes, { useHash: true })
         ],
-        providers: [],
+        providers: [__WEBPACK_IMPORTED_MODULE_7__services_page_event_page_event_service__["a" /* PageEventService */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
 
 //# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/side-bar/side-bar.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/side-bar/side-bar.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div #sidebar class=\"list-group\">\r\n  <a *ngFor=\"let page of pages;let idx = index;\"\r\n      routerLink=\"{{page.link}}\"\r\n      routerLinkActive=\"active\"\r\n      [routerLinkActiveOptions]=\"{ exact: true }\"\r\n      (click)=\"clickLink(idx)\"\r\n      class=\"list-group-item\">\r\n      {{page.name}}\r\n    </a>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/side-bar/side-bar.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideBarComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SideBarComponent = (function () {
+    function SideBarComponent(pageEvent) {
+        this.pageEvent = pageEvent;
+        this.beforeIndex = 0;
+        this.animeState = "";
+        this.pages = [
+            {
+                link: "./",
+                name: "Top"
+            },
+            {
+                link: "./3dview",
+                name: "3dview"
+            }
+        ];
+    }
+    SideBarComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.pageEvent.eventData.subscribe(function () {
+            _this.pageEvent.sendStateData(_this.animeState);
+        });
+    };
+    SideBarComponent.prototype.clickLink = function (index) {
+        if (index > this.beforeIndex) {
+            this.animeState = "slideInDown";
+        }
+        else {
+            this.animeState = "slideInUp";
+        }
+        this.beforeIndex = index;
+    };
+    return SideBarComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ViewChild */])('sidebar'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object)
+], SideBarComponent.prototype, "sidebar", void 0);
+SideBarComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+        selector: 'app-side-bar',
+        template: __webpack_require__("../../../../../src/app/components/side-bar/side-bar.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/components/side-bar/side-bar.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */]) === "function" && _b || Object])
+], SideBarComponent);
+
+var _a, _b;
+//# sourceMappingURL=side-bar.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/top-area/top-area.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".top{\r\n  width: 100%;\r\n  height: 200px;\r\n}\r\n.canvas{\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/top-area/top-area.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"top\">\n    <canvas #canvas class=\"canvas\"></canvas>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/top-area/top-area.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TopAreaComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_paper__ = __webpack_require__("../../../../paper/dist/paper-full.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_paper___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_paper__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var TopAreaComponent = (function () {
+    function TopAreaComponent() {
+    }
+    TopAreaComponent.prototype.ngOnInit = function () {
+        this.scope = new __WEBPACK_IMPORTED_MODULE_1_paper__["PaperScope"]();
+        this.project = new __WEBPACK_IMPORTED_MODULE_1_paper__["Project"](this.canvasElement.nativeElement);
+        var canvas = this.canvasElement.nativeElement;
+        var pathArray = [];
+        for (var i = 0; i < 50; i++) {
+            var radius = Math.random() * 35;
+            var path = new __WEBPACK_IMPORTED_MODULE_1_paper__["Path"].Circle({
+                center: [Math.random() * canvas.scrollWidth, Math.random() * canvas.scrollHeight],
+                radius: radius,
+                fillColor: '#' + Math.floor(Math.random() * 16777215).toString(16)
+            });
+            pathArray.push(path);
+            this.project.activeLayer.addChild(path);
+        }
+        setInterval(function () {
+            for (var i = 0; i < 50; i++) {
+                if (canvas.scrollHeight + 35 < pathArray[i].position.y) {
+                    pathArray[i].position.x = Math.random() * canvas.scrollWidth;
+                    pathArray[i].position.y = -35;
+                }
+                pathArray[i].position.y += 0.5;
+            }
+        }, 1);
+    };
+    return TopAreaComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ViewChild */])('canvas'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object)
+], TopAreaComponent.prototype, "canvasElement", void 0);
+TopAreaComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+        selector: 'app-top-area',
+        template: __webpack_require__("../../../../../src/app/components/top-area/top-area.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/components/top-area/top-area.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], TopAreaComponent);
+
+var _a;
+//# sourceMappingURL=top-area.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/directives/page-animation/page-animation.directive.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PageAnimationDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var PageAnimationDirective = (function () {
+    function PageAnimationDirective(element, pageEvent) {
+        this.element = element;
+        this.pageEvent = pageEvent;
+        var elem = this.element.nativeElement;
+        var classList = elem.classList;
+        classList.add("animated");
+    }
+    PageAnimationDirective.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subscription = this.pageEvent.stateData.subscribe(function (className) {
+            var elem = _this.element.nativeElement;
+            var classList = elem.classList;
+            if (className != "") {
+                classList.add(className);
+            }
+        });
+        this.pageEvent.sendEventData("ok");
+    };
+    PageAnimationDirective.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
+    return PageAnimationDirective;
+}());
+PageAnimationDirective = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* Directive */])({
+        selector: '[appPageAnimation]'
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */]) === "function" && _b || Object])
+], PageAnimationDirective);
+
+var _a, _b;
+//# sourceMappingURL=page-animation.directive.js.map
 
 /***/ }),
 
@@ -149,7 +397,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"animated slideInUp\">\n  <p>\n    home works!\n  </p>\n</div>\n"
+module.exports = "<div appPageAnimation>\n  <p>\n    This page is testing to WebGL by eee_nbnb.\n  </p>\n  <p>\n    Thank you!!\n  </p>\n</div>\n"
 
 /***/ }),
 
@@ -210,7 +458,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/view-3d-area/view-3d-area.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"animated slideInDown\">\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n<div>\n"
+module.exports = "<div appPageAnimation>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n<div>\n"
 
 /***/ }),
 
@@ -232,9 +480,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var View3dAreaComponent = (function () {
     function View3dAreaComponent() {
-        this.isCollapsed = false;
     }
     View3dAreaComponent.prototype.ngOnInit = function () {
+    };
+    View3dAreaComponent.prototype.ngOnDestroy = function () {
     };
     return View3dAreaComponent;
 }());
@@ -251,37 +500,14 @@ View3dAreaComponent = __decorate([
 
 /***/ }),
 
-/***/ "../../../../../src/app/side-bar/side-bar.component.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/side-bar/side-bar.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<div #sidebar class=\"list-group\">\r\n  <a *ngFor=\"let page of pages;let idx = index;\"\r\n      routerLink=\"{{page.link}}\"\r\n      routerLinkActive=\"active\"\r\n      [routerLinkActiveOptions]=\"{ exact: true }\"\r\n      (click)=\"clickLink(idx)\"\r\n      class=\"list-group-item\">\r\n      {{page.name}}\r\n    </a>\r\n</div>\r\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/side-bar/side-bar.component.ts":
+/***/ "../../../../../src/app/services/page-event/page-event.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideBarComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PageEventService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -292,47 +518,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-var SideBarComponent = (function () {
-    function SideBarComponent() {
-        this.beforeIndex = 0;
-        this.pages = [
-            {
-                link: "./",
-                name: "Top"
-            },
-            {
-                link: "./3dview",
-                name: "3dview"
-            }
-        ];
-    }
-    SideBarComponent.prototype.ngOnInit = function () { };
-    SideBarComponent.prototype.clickLink = function (index) {
-        if (index > this.beforeIndex) {
-            console.log("down");
-        }
-        else {
-            console.log("up");
-        }
-        this.beforeIndex = index;
-    };
-    return SideBarComponent;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ViewChild */])('sidebar'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object)
-], SideBarComponent.prototype, "sidebar", void 0);
-SideBarComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
-        selector: 'app-side-bar',
-        template: __webpack_require__("../../../../../src/app/side-bar/side-bar.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/side-bar/side-bar.component.css")]
-    }),
-    __metadata("design:paramtypes", [])
-], SideBarComponent);
 
-var _a;
-//# sourceMappingURL=side-bar.component.js.map
+var PageEventService = (function () {
+    function PageEventService() {
+        this.eventSource = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.stateSource = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.eventData = this.eventSource.asObservable();
+        this.stateData = this.stateSource.asObservable();
+    }
+    PageEventService.prototype.sendEventData = function (msg) {
+        this.eventSource.next(msg);
+    };
+    PageEventService.prototype.sendStateData = function (msg) {
+        this.stateSource.next(msg);
+    };
+    return PageEventService;
+}());
+PageEventService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
+    __metadata("design:paramtypes", [])
+], PageEventService);
+
+//# sourceMappingURL=page-event.service.js.map
 
 /***/ }),
 
@@ -380,6 +587,20 @@ Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* pl
 
 module.exports = __webpack_require__("../../../../../src/main.ts");
 
+
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 
