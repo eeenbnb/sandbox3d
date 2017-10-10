@@ -25,7 +25,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".padding{\r\n  padding:10px;\r\n}\r\n", ""]);
+exports.push([module.i, ".padding{\n  padding-top:10px;\n}\n", ""]);
 
 // exports
 
@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <app-top-area></app-top-area>\n</div>\n<div class=\"container-fluid padding\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-4\">\n      <app-side-bar></app-side-bar>\n    </div>\n    <div class=\"col-xs-12 col-md-8\">\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div>\n  <app-top-area></app-top-area>\n</div>\n<div class=\"container-fluid padding\">\n  <div class=\"row\">\n    <div class=\"hidden-xs col-md-4\">\n      <app-side-bar></app-side-bar>\n    </div>\n    <div class=\"col-xs-12 col-md-8\">\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -88,12 +88,14 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__directives_page_animation_page_animation_directive__ = __webpack_require__("../../../../../src/app/directives/page-animation/page-animation.directive.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_top_area_top_area_component__ = __webpack_require__("../../../../../src/app/components/top-area/top-area.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__directives_page_fixed_page_fixed_directive__ = __webpack_require__("../../../../../src/app/directives/page-fixed/page-fixed.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -121,7 +123,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_5__components_side_bar_side_bar_component__["a" /* SideBarComponent */],
             __WEBPACK_IMPORTED_MODULE_6__pages_home_home_component__["a" /* HomeComponent */],
             __WEBPACK_IMPORTED_MODULE_8__directives_page_animation_page_animation_directive__["a" /* PageAnimationDirective */],
-            __WEBPACK_IMPORTED_MODULE_9__components_top_area_top_area_component__["a" /* TopAreaComponent */]
+            __WEBPACK_IMPORTED_MODULE_9__components_top_area_top_area_component__["a" /* TopAreaComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__directives_page_fixed_page_fixed_directive__["a" /* PageFixedDirective */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -157,7 +160,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/side-bar/side-bar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div #sidebar class=\"list-group\">\r\n  <a *ngFor=\"let page of pages;let idx = index;\"\r\n      routerLink=\"{{page.link}}\"\r\n      routerLinkActive=\"active\"\r\n      [routerLinkActiveOptions]=\"{ exact: true }\"\r\n      (click)=\"clickLink(idx)\"\r\n      class=\"list-group-item\">\r\n      {{page.name}}\r\n    </a>\r\n</div>\r\n"
+module.exports = "<div #sidebar class=\"list-group\">\n  <a *ngFor=\"let page of pages;let idx = index;\"\n      routerLink=\"{{page.link}}\"\n      routerLinkActive=\"active\"\n      [routerLinkActiveOptions]=\"{ exact: true }\"\n      (click)=\"clickLink(idx)\"\n      class=\"list-group-item\">\n      {{page.name}}\n    </a>\n</div>\n"
 
 /***/ }),
 
@@ -168,6 +171,8 @@ module.exports = "<div #sidebar class=\"list-group\">\r\n  <a *ngFor=\"let page 
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideBarComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -177,6 +182,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 var SideBarComponent = (function () {
@@ -199,6 +205,16 @@ var SideBarComponent = (function () {
         var _this = this;
         this.pageEvent.eventData.subscribe(function () {
             _this.pageEvent.sendStateData(_this.animeState);
+        });
+        var $sidebar = __WEBPACK_IMPORTED_MODULE_2_jquery__(this.sidebar.nativeElement);
+        window.addEventListener('scroll', function () {
+            $sidebar.stop();
+            if (window.pageYOffset > 100) {
+                $sidebar.animate({ 'padding-top': __WEBPACK_IMPORTED_MODULE_2_jquery__(window).scrollTop() - 100 }, '500');
+            }
+            else {
+                $sidebar.animate({ 'padding-top': 0 }, '500');
+            }
         });
     };
     SideBarComponent.prototype.clickLink = function (index) {
@@ -238,7 +254,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".top{\r\n  width: 100%;\r\n  height: 200px;\r\n}\r\n.canvas{\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n", ""]);
+exports.push([module.i, ".top{\n  width: 100%;\n  height: 200px;\n}\n.canvas{\n  width: 100%;\n  height: 100%;\n  height: 200px;\n  background-color: #FFF;\n  position: relative;\n}\n.fixed {\n  z-index: 100;\n  position: fixed;\n  top: -100px;\n}\n", ""]);
 
 // exports
 
@@ -251,7 +267,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/top-area/top-area.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"top\">\n    <canvas #canvas class=\"canvas\"></canvas>\n</div>\n"
+module.exports = "<div class=\"top\">\n    <canvas #canvas appPageFixed class=\"canvas\"></canvas>\n</div>\n"
 
 /***/ }),
 
@@ -376,6 +392,49 @@ var _a, _b;
 
 /***/ }),
 
+/***/ "../../../../../src/app/directives/page-fixed/page-fixed.directive.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PageFixedDirective; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var PageFixedDirective = (function () {
+    function PageFixedDirective(element) {
+        this.element = element;
+        window.addEventListener('scroll', function () {
+            var elem = element.nativeElement;
+            if (window.pageYOffset > 100) {
+                elem.classList.add('fixed');
+            }
+            else {
+                elem.classList.remove('fixed');
+            }
+        });
+    }
+    return PageFixedDirective;
+}());
+PageFixedDirective = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* Directive */])({
+        selector: '[appPageFixed]'
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object])
+], PageFixedDirective);
+
+var _a;
+//# sourceMappingURL=page-fixed.directive.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/pages/home/home.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -397,7 +456,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div appPageAnimation>\n  <p>\n    This page is testing to WebGL by eee_nbnb.\n  </p>\n  <p>\n    Thank you!!\n  </p>\n</div>\n"
+module.exports = "<div appPageAnimation>\n  <p>\n    This page is testing to WebGL by eee_nbnb.\n  </p>\n  <p>\n    Thank you!!\n  </p>\n  <p style=\"height:1000px\">\n    すごく下に長いテキスト\n  </p>\n</div>\n"
 
 /***/ }),
 

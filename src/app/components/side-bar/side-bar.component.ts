@@ -1,5 +1,6 @@
 import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import { PageEventService } from '../../services/page-event/page-event.service'
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-side-bar',
@@ -28,6 +29,16 @@ export class SideBarComponent implements OnInit {
     this.pageEvent.eventData.subscribe(()=>{
       this.pageEvent.sendStateData(this.animeState);
     })
+    let $sidebar:JQuery = $(this.sidebar.nativeElement);
+    window.addEventListener('scroll',()=>{
+      $sidebar.stop();
+      if(window.pageYOffset > 100){
+        $sidebar.animate({'padding-top':$(window).scrollTop() - 100},'500');
+      }else{
+        $sidebar.animate({'padding-top':0},'500');
+      }
+
+    });
   }
 
   clickLink(index:number){

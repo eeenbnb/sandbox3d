@@ -11,8 +11,7 @@ export class TopAreaComponent implements OnInit {
   @ViewChild('canvas') canvasElement: ElementRef;
   scope: PaperScope;
   project: Project;
-
-
+  
   constructor() {
   }
 
