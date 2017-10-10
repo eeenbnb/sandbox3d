@@ -17,7 +17,11 @@ export class SideBarComponent implements OnInit {
     {
       link:"./3dview",
       name:"3D/fps"
-    }
+    },
+    {
+      link:"./pinball",
+      name:"3D/pinball"
+    },
   ]
 
 

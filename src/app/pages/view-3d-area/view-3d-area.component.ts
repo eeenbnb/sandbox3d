@@ -29,7 +29,7 @@ export class View3dAreaComponent implements OnInit,OnDestroy {
     scene.add( new THREE.GridHelper( 1000, 1000 ) );
     scene.add( new THREE.AxisHelper(20) );
     //camera
-    const camera = new THREE.PerspectiveCamera(45, 800 / 600, 1, 100000);
+    const camera = new THREE.PerspectiveCamera(45, rendererSize / rendererSize, 1, 100000);
     camera.position.set(0, 1.7, -1.5);
     camera.lookAt(new THREE.Vector3(0,1.7,0));
     scene.add(camera);
