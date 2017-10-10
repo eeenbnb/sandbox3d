@@ -25,7 +25,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".padding{\n  padding-top:10px;\n}\n", ""]);
+exports.push([module.i, ".padding{\r\n  padding-top:10px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <app-top-area></app-top-area>\n</div>\n<div class=\"container-fluid padding\">\n  <div class=\"row\">\n    <div class=\"hidden-xs col-md-4\">\n      <app-side-bar></app-side-bar>\n    </div>\n    <div class=\"col-xs-12 col-md-8\">\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div>\r\n  <app-top-area></app-top-area>\r\n</div>\r\n<div class=\"container-fluid padding\">\r\n  <div class=\"row\">\r\n    <div class=\"hidden-xs col-md-4\">\r\n      <app-side-bar></app-side-bar>\r\n    </div>\r\n    <div class=\"col-xs-12 col-md-8\">\r\n      <router-outlet></router-outlet>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -124,7 +124,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_6__pages_home_home_component__["a" /* HomeComponent */],
             __WEBPACK_IMPORTED_MODULE_8__directives_page_animation_page_animation_directive__["a" /* PageAnimationDirective */],
             __WEBPACK_IMPORTED_MODULE_9__components_top_area_top_area_component__["a" /* TopAreaComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__directives_page_fixed_page_fixed_directive__["a" /* PageFixedDirective */]
+            __WEBPACK_IMPORTED_MODULE_10__directives_page_fixed_page_fixed_directive__["a" /* PageFixedDirective */],
+            __WEBPACK_IMPORTED_MODULE_10__directives_page_fixed_page_fixed_directive__["b" /* PageFixedSideBarDirective */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -160,7 +161,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/side-bar/side-bar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div #sidebar class=\"list-group\">\n  <a *ngFor=\"let page of pages;let idx = index;\"\n      routerLink=\"{{page.link}}\"\n      routerLinkActive=\"active\"\n      [routerLinkActiveOptions]=\"{ exact: true }\"\n      (click)=\"clickLink(idx)\"\n      class=\"list-group-item\">\n      {{page.name}}\n    </a>\n</div>\n"
+module.exports = "<div class=\"list-group\" appPageFixedSidebar>\r\n  <a *ngFor=\"let page of pages;let idx = index;\"\r\n      routerLink=\"{{page.link}}\"\r\n      routerLinkActive=\"active\"\r\n      [routerLinkActiveOptions]=\"{ exact: true }\"\r\n      (click)=\"clickLink(idx)\"\r\n      class=\"list-group-item\">\r\n      {{page.name}}\r\n    </a>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -171,8 +172,6 @@ module.exports = "<div #sidebar class=\"list-group\">\n  <a *ngFor=\"let page of
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SideBarComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -182,7 +181,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 var SideBarComponent = (function () {
@@ -197,7 +195,7 @@ var SideBarComponent = (function () {
             },
             {
                 link: "./3dview",
-                name: "3dview"
+                name: "3D/fps"
             }
         ];
     }
@@ -206,19 +204,9 @@ var SideBarComponent = (function () {
         this.pageEvent.eventData.subscribe(function () {
             _this.pageEvent.sendStateData(_this.animeState);
         });
-        var $sidebar = __WEBPACK_IMPORTED_MODULE_2_jquery__(this.sidebar.nativeElement);
-        window.addEventListener('scroll', function () {
-            $sidebar.stop();
-            if (window.pageYOffset > 100) {
-                $sidebar.animate({ 'padding-top': __WEBPACK_IMPORTED_MODULE_2_jquery__(window).scrollTop() - 100 }, '500');
-            }
-            else {
-                $sidebar.animate({ 'padding-top': 0 }, '500');
-            }
-        });
     };
     SideBarComponent.prototype.clickLink = function (index) {
-        if (index > this.beforeIndex) {
+        if (index < this.beforeIndex) {
             this.animeState = "slideInDown";
         }
         else {
@@ -228,20 +216,16 @@ var SideBarComponent = (function () {
     };
     return SideBarComponent;
 }());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ViewChild */])('sidebar'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object)
-], SideBarComponent.prototype, "sidebar", void 0);
 SideBarComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'app-side-bar',
         template: __webpack_require__("../../../../../src/app/components/side-bar/side-bar.component.html"),
         styles: [__webpack_require__("../../../../../src/app/components/side-bar/side-bar.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__["a" /* PageEventService */]) === "function" && _a || Object])
 ], SideBarComponent);
 
-var _a, _b;
+var _a;
 //# sourceMappingURL=side-bar.component.js.map
 
 /***/ }),
@@ -254,7 +238,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".top{\n  width: 100%;\n  height: 200px;\n}\n.canvas{\n  width: 100%;\n  height: 100%;\n  height: 200px;\n  background-color: #FFF;\n  position: relative;\n}\n.fixed {\n  z-index: 100;\n  position: fixed;\n  top: -100px;\n}\n", ""]);
+exports.push([module.i, ".top{\r\n  width: 100%;\r\n  height: 200px;\r\n}\r\n.canvas{\r\n  width: 100%;\r\n  height: 100%;\r\n  height: 200px;\r\n  background-color: #FFF;\r\n  position: relative;\r\n  z-index: 100;\r\n}\r\n.fixed {\r\n  position: fixed;\r\n  top: -100px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -267,7 +251,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/top-area/top-area.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"top\">\n    <canvas #canvas appPageFixed class=\"canvas\"></canvas>\n</div>\n"
+module.exports = "<div class=\"top\">\r\n    <canvas #canvas appPageFixed class=\"canvas\"></canvas>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -298,7 +282,8 @@ var TopAreaComponent = (function () {
         this.project = new __WEBPACK_IMPORTED_MODULE_1_paper__["Project"](this.canvasElement.nativeElement);
         var canvas = this.canvasElement.nativeElement;
         var pathArray = [];
-        for (var i = 0; i < 50; i++) {
+        var pathAddNumber = [];
+        for (var i = 0; i < 100; i++) {
             var radius = Math.random() * 35;
             var path = new __WEBPACK_IMPORTED_MODULE_1_paper__["Path"].Circle({
                 center: [Math.random() * canvas.scrollWidth, Math.random() * canvas.scrollHeight],
@@ -307,14 +292,21 @@ var TopAreaComponent = (function () {
             });
             pathArray.push(path);
             this.project.activeLayer.addChild(path);
+            pathAddNumber[i] = {
+                x: Math.random() - 0.5,
+                y: Math.random()
+            };
         }
         setInterval(function () {
-            for (var i = 0; i < 50; i++) {
-                if (canvas.scrollHeight + 35 < pathArray[i].position.y) {
-                    pathArray[i].position.x = Math.random() * canvas.scrollWidth;
-                    pathArray[i].position.y = -35;
+            for (var i = 0; i < 100; i++) {
+                if (canvas.scrollHeight < pathArray[i].position.y || pathArray[i].position.y < 0) {
+                    pathAddNumber[i].y *= -1;
                 }
-                pathArray[i].position.y += 0.5;
+                if (pathArray[i].position.x > canvas.scrollWidth || pathArray[i].position.x < 0) {
+                    pathAddNumber[i].x *= -1;
+                }
+                pathArray[i].position.y += pathAddNumber[i].y;
+                pathArray[i].position.x += pathAddNumber[i].x;
             }
         }, 1);
     };
@@ -397,7 +389,10 @@ var _a, _b;
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PageFixedDirective; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PageFixedSideBarDirective; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -407,6 +402,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 var PageFixedDirective = (function () {
     function PageFixedDirective(element) {
@@ -430,7 +426,30 @@ PageFixedDirective = __decorate([
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object])
 ], PageFixedDirective);
 
-var _a;
+var PageFixedSideBarDirective = (function () {
+    function PageFixedSideBarDirective(element) {
+        this.element = element;
+        var $sidebar = __WEBPACK_IMPORTED_MODULE_1_jquery__(element.nativeElement);
+        window.addEventListener('scroll', function () {
+            $sidebar.stop();
+            if (window.pageYOffset > 100) {
+                $sidebar.animate({ 'padding-top': __WEBPACK_IMPORTED_MODULE_1_jquery__(window).scrollTop() - 100 }, '500');
+            }
+            else {
+                $sidebar.animate({ 'padding-top': 0 }, '500');
+            }
+        });
+    }
+    return PageFixedSideBarDirective;
+}());
+PageFixedSideBarDirective = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* Directive */])({
+        selector: '[appPageFixedSidebar]'
+    }),
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _b || Object])
+], PageFixedSideBarDirective);
+
+var _a, _b;
 //# sourceMappingURL=page-fixed.directive.js.map
 
 /***/ }),
@@ -456,7 +475,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div appPageAnimation>\n  <p>\n    This page is testing to WebGL by eee_nbnb.\n  </p>\n  <p>\n    Thank you!!\n  </p>\n  <p style=\"height:1000px\">\n    すごく下に長いテキスト\n  </p>\n</div>\n"
+module.exports = "<div appPageAnimation>\r\n  <p>\r\n    This page is testing to WebGL by eee_nbnb.\r\n  </p>\r\n  <p>\r\n    Thank you!!\r\n  </p>\r\n  <p style=\"height:1000px\">\r\n    すごく下に長いテキスト\r\n  </p>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -517,7 +536,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/view-3d-area/view-3d-area.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div appPageAnimation>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n  <button class=\"btn btn-primary\">Test Button</button>\n<div>\n"
+module.exports = "<div appPageAnimation>\n  <div style=\"padding:10px;text-align:center\">\n    <div #canvasArea style=\"width:95%;\"></div>\n  </div>\n<div>\n"
 
 /***/ }),
 
@@ -527,6 +546,7 @@ module.exports = "<div appPageAnimation>\n  <button class=\"btn btn-primary\">Te
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return View3dAreaComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_three__ = __webpack_require__("../../../../three/build/three.module.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -537,15 +557,63 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+window.THREE = __WEBPACK_IMPORTED_MODULE_1_three__;
+__webpack_require__("../../../../three/examples/js/controls/PointerLockControls.js");
 var View3dAreaComponent = (function () {
     function View3dAreaComponent() {
     }
     View3dAreaComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.canvasAreaElement = this.canvasArea.nativeElement;
+        var rendererSize = this.canvasAreaElement.scrollWidth;
+        var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]();
+        renderer.setSize(rendererSize, rendererSize);
+        this.canvasAreaElement.appendChild(renderer.domElement);
+        //scene
+        var scene = new __WEBPACK_IMPORTED_MODULE_1_three__["Scene"]();
+        scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0xf0f0f0);
+        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["GridHelper"](1000, 1000));
+        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AxisHelper"](20));
+        //camera
+        var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, 800 / 600, 1, 100000);
+        camera.position.set(0, 1.7, -1.5);
+        camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 1.7, 0));
+        scene.add(camera);
+        //light
+        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AmbientLight"](0xF0F0F0));
+        var controls = new window.THREE.PointerLockControls(camera);
+        scene.add(controls.getObject());
+        var tick = function () {
+            _this.animationFrame = requestAnimationFrame(tick);
+            renderer.render(scene, camera);
+        };
+        tick();
+        this.canvasAreaElement.addEventListener('click', function (event) {
+            var element = _this.canvasAreaElement;
+            element.requestPointerLock = element.requestPointerLock;
+            element.requestPointerLock();
+        }, false);
+        document.addEventListener('pointerlockchange', function (e) {
+            if (document.pointerLockElement == _this.canvasAreaElement) {
+                controls.enabled = true;
+            }
+            else {
+                controls.enabled = false;
+            }
+        }, false);
     };
     View3dAreaComponent.prototype.ngOnDestroy = function () {
+        cancelAnimationFrame(this.animationFrame);
+        this.canvasAreaElement.removeEventListener('click', function (e) { console.log(e); });
+        document.removeEventListener('pointerlockchange', function (e) { console.log(e); });
     };
     return View3dAreaComponent;
 }());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ViewChild */])('canvasArea'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object)
+], View3dAreaComponent.prototype, "canvasArea", void 0);
 View3dAreaComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
         selector: 'app-view-3d-area',
@@ -555,6 +623,7 @@ View3dAreaComponent = __decorate([
     __metadata("design:paramtypes", [])
 ], View3dAreaComponent);
 
+var _a;
 //# sourceMappingURL=view-3d-area.component.js.map
 
 /***/ }),

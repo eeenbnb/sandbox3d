@@ -8,9 +8,9 @@
   height: 200px;
   background-color: #FFF;
   position: relative;
+  z-index: 100;
 }
 .fixed {
-  z-index: 100;
   position: fixed;
   top: -100px;
 }

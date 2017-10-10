@@ -11,7 +11,7 @@ export class TopAreaComponent implements OnInit {
   @ViewChild('canvas') canvasElement: ElementRef;
   scope: PaperScope;
   project: Project;
-  
+
   constructor() {
   }
 
@@ -20,7 +20,8 @@ export class TopAreaComponent implements OnInit {
     this.project = new Project(this.canvasElement.nativeElement);
     let canvas = (this.canvasElement.nativeElement as Element);
     var pathArray = [];
-    for(var i=0;i<50;i++){
+    var pathAddNumber = [];
+    for(var i=0;i<100;i++){
       let radius = Math.random() * 35;
       const path = new Path.Circle({
         center: [Math.random() * canvas.scrollWidth, Math.random() * canvas.scrollHeight],
@@ -29,14 +30,21 @@ export class TopAreaComponent implements OnInit {
       });
       pathArray.push(path);
       this.project.activeLayer.addChild(path);
+      pathAddNumber[i] = {
+        x:Math.random() - 0.5,
+        y:Math.random()
+      };
     }
     setInterval(()=>{
-      for(var i=0;i<50;i++){
-        if(canvas.scrollHeight + 35 < pathArray[i].position.y){
-          pathArray[i].position.x = Math.random() * canvas.scrollWidth;
-          pathArray[i].position.y = -35;
+      for(var i=0;i<100;i++){
+        if(canvas.scrollHeight < pathArray[i].position.y || pathArray[i].position.y < 0){
+          pathAddNumber[i].y *= -1;
         }
-        pathArray[i].position.y += 0.5;
+        if(pathArray[i].position.x > canvas.scrollWidth || pathArray[i].position.x < 0){
+          pathAddNumber[i].x *= -1;
+        }
+        pathArray[i].position.y += pathAddNumber[i].y;
+        pathArray[i].position.x += pathAddNumber[i].x;
       }
     },1);
 

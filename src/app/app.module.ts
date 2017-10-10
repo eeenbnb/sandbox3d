@@ -10,7 +10,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { PageEventService } from './services/page-event/page-event.service';
 import { PageAnimationDirective } from './directives/page-animation/page-animation.directive';
 import { TopAreaComponent } from './components/top-area/top-area.component';
-import { PageFixedDirective } from './directives/page-fixed/page-fixed.directive';
+import { PageFixedDirective,PageFixedSideBarDirective } from './directives/page-fixed/page-fixed.directive';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,7 +26,8 @@ const appRoutes: Routes = [
     HomeComponent,
     PageAnimationDirective,
     TopAreaComponent,
-    PageFixedDirective
+    PageFixedDirective,
+    PageFixedSideBarDirective
   ],
   imports: [
     BrowserModule,
