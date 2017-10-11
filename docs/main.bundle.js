@@ -345,6 +345,8 @@ var _a;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PageAnimationDirective; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__("../../../../jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -356,6 +358,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var PageAnimationDirective = (function () {
     function PageAnimationDirective(element, pageEvent) {
         this.element = element;
@@ -363,6 +366,7 @@ var PageAnimationDirective = (function () {
         var elem = this.element.nativeElement;
         var classList = elem.classList;
         classList.add("animated");
+        __WEBPACK_IMPORTED_MODULE_2_jquery__("html,body").animate({ scrollTop: 0 }, '500');
     }
     PageAnimationDirective.prototype.ngOnInit = function () {
         var _this = this;
@@ -573,53 +577,119 @@ var PinBallComponent = (function () {
         var _this = this;
         this.canvasAreaElement = this.canvasArea.nativeElement;
         var rendererSize = this.canvasAreaElement.scrollWidth;
+        var xObjects = [];
+        var zObjects = [];
+        var deleteObjects = [];
+        var ballMoveAmout = {
+            x: 0.5,
+            z: 0.5
+        };
+        var barMoveAmout = {
+            x: 2
+        };
+        var dg = 0;
         var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]();
         renderer.setSize(rendererSize, rendererSize);
         this.canvasAreaElement.appendChild(renderer.domElement);
         //scene
         var scene = new __WEBPACK_IMPORTED_MODULE_1_three__["Scene"]();
         scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0x5e5e5e);
-        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["GridHelper"](1000, 1000));
+        //scene.add( new THREE.GridHelper( 1000, 1000 ) );
         //scene.add( new THREE.AxisHelper(20) );
         //camera
-        var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](120, rendererSize / rendererSize, 1, 10000);
-        camera.position.set(6, 6, -6);
+        var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, rendererSize / rendererSize, 1, 10000);
+        camera.position.set(0, 100, -120);
         camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0));
         scene.add(camera);
         //light
         //scene.add( new THREE.AmbientLight( 0xF0F0F0 ) );
+        var light = new __WEBPACK_IMPORTED_MODULE_1_three__["PointLight"](0x000000, 1, 100);
+        light.position.set(0, 0, 10);
+        scene.add(light);
         var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["IcosahedronGeometry"](1, 5);
         var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0x000000, emissive: 0xf0f0f0 });
-        var box = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
-        box.position.set(0, 0, 0);
-        scene.add(box);
-        var boulGeometry = new __WEBPACK_IMPORTED_MODULE_1_three__["IcosahedronGeometry"](1, 5);
-        var boulMaterial = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xff0000, emissive: 0xfff0f0 });
-        var boul1 = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
-        var boul2 = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
-        boul1.position.set(5, 5, 5);
-        boul2.position.set(-5, -5, -5);
-        scene.add(boul2);
-        scene.add(boul1);
+        var ball = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
+        ball.position.set(0, 0.5, -39);
+        scene.add(ball);
+        var barGeometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](10, 2, 1);
+        var barMaterial = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0x000000, emissive: 0xf0f0f0 });
+        var bar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](barGeometry, barMaterial);
+        bar.position.set(0, 1, -40);
+        scene.add(bar);
+        deleteObjects.push(bar);
+        //foller
+        {
+            var geometry_1 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](40, 0, 100);
+            var material_1 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xf0f0f0 });
+            var box = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry_1, material_1);
+            box.position.set(0, 0, 0);
+            scene.add(box);
+        }
+        //side
+        {
+            var boxGeometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](1, 2, 100);
+            var material_2 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0x000000, emissive: 0xfefefe });
+            var leftBar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](boxGeometry, material_2);
+            var rightBar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](boxGeometry, material_2);
+            leftBar.position.set(20, 1, 0);
+            rightBar.position.set(-20, 1, 0);
+            scene.add(leftBar);
+            scene.add(rightBar);
+            xObjects.push(leftBar);
+            xObjects.push(rightBar);
+        }
+        //front back
+        {
+            var boxGeometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](41, 2, 1);
+            var material_3 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xfefefe, emissive: 0xfefefe });
+            var upBar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](boxGeometry, material_3);
+            var underBar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](boxGeometry, material_3);
+            upBar.position.set(0, 1, 50);
+            underBar.position.set(0, 1, -50);
+            scene.add(upBar);
+            scene.add(underBar);
+            zObjects.push(upBar);
+            zObjects.push(underBar);
+        }
+        for (var i = 0; i < 25; i++) {
+            var geometry_2 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](1, 1, 1);
+            var material_4 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xff0000, emissive: 0xff0000 });
+            for (var j = 0; j < 20; j++) {
+                var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry_2, material_4);
+                d.position.set(10 - j, 0.5, 40 - i);
+                scene.add(d);
+                deleteObjects.push(d);
+            }
+        }
         var tick = function () {
+            var ballRay = new __WEBPACK_IMPORTED_MODULE_1_three__["Raycaster"](ball.position, new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0).sub(ball.position).normalize());
+            var barRay = new __WEBPACK_IMPORTED_MODULE_1_three__["Raycaster"](bar.position, new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, -40).sub(bar.position).normalize());
+            var intersections = ballRay.intersectObjects(deleteObjects);
+            var barIntersections = barRay.intersectObjects(xObjects);
+            if (ball.position.x > 19.5 || ball.position.x < -19.5) {
+                ballMoveAmout.x *= -1;
+            }
+            if (ball.position.z > 49.5 || ball.position.z < -49.5) {
+                ballMoveAmout.z *= -1;
+            }
+            if (intersections.length > 0) {
+                ballMoveAmout.x *= -1;
+                ballMoveAmout.z *= -1;
+            }
+            if (barIntersections.length > 0) {
+                barMoveAmout.x *= -1;
+            }
+            bar.position.x += barMoveAmout.x;
+            ball.position.x += ballMoveAmout.x;
+            ball.position.z += ballMoveAmout.z;
+            dg += 0.25;
+            camera.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 100;
+            camera.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 100;
+            camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0));
             _this.animationFrame = requestAnimationFrame(tick);
             renderer.render(scene, camera);
         };
         tick();
-        var dg = 0;
-        setInterval(function () {
-            dg += 0.25;
-            boul1.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 5;
-            boul1.position.y = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 5;
-            boul1.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 5;
-            boul2.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 5;
-            boul2.position.y = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 5;
-            boul2.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 5;
-            camera.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 10;
-            camera.position.y = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg / 0.5)) * 2 + 10;
-            camera.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 10;
-            camera.lookAt(box.position);
-        }, 1);
     };
     PinBallComponent.prototype.ngOnDestroy = function () {
         cancelAnimationFrame(this.animationFrame);

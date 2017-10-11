@@ -18,11 +18,14 @@ export class PinBallComponent implements OnInit {
     let rendererSize = this.canvasAreaElement.scrollWidth;
     const xObjects = [];
     const zObjects = [];
-    const deleteObjects = [];
+    var deleteObjects = [];
     var ballMoveAmout = {
       x:0.5,
       z:0.5
     };
+    var barMoveAmout = {
+      x:2
+    }
     var dg =0;
 
     const renderer = new THREE.WebGLRenderer();
@@ -48,8 +51,15 @@ export class PinBallComponent implements OnInit {
     const geometry = new THREE.IcosahedronGeometry(1,5)
     const material = new THREE.MeshPhongMaterial({color: 0x000000,emissive:0xf0f0f0});
     const ball     = new THREE.Mesh(geometry, material);
-    ball.position.set(0,0.5,0);
+    ball.position.set(0,0.5,-39);
     scene.add(ball);
+
+    const barGeometry = new THREE.BoxGeometry(10,2,1)
+    const barMaterial = new THREE.MeshPhongMaterial({color: 0x000000,emissive:0xf0f0f0});
+    const bar     = new THREE.Mesh(barGeometry, barMaterial);
+    bar.position.set(0,1,-40);
+    scene.add(bar);
+    deleteObjects.push(bar);
     //foller
     {
       const geometry = new THREE.BoxGeometry(40,0,100)
@@ -84,14 +94,14 @@ export class PinBallComponent implements OnInit {
       zObjects.push(upBar);
       zObjects.push(underBar);
     }
-    for(var i=0;i<20;i++){
-      const geometry = new THREE.IcosahedronGeometry(1,5)
-      const material = new THREE.MeshPhongMaterial({color:Math.floor(Math.random()*16777215),emissive:Math.floor(Math.random()*16777215)});
-      for(var j=0;j<10;j++){
-        const ball     = new THREE.Mesh(geometry, material);
-        ball.position.set( 9 - j*2,0.5, 40 - i*2);
-        scene.add(ball);
-        deleteObjects.push(ball);
+    for(var i=0;i<25;i++){
+      const geometry = new THREE.BoxGeometry(1,1,1)
+      const material = new THREE.MeshPhongMaterial({color:0xff0000,emissive:0xff0000});
+      for(var j=0;j<20;j++){
+        const d     = new THREE.Mesh(geometry, material);
+        d.position.set( 10 - j,0.5, 40 - i);
+        scene.add(d);
+        deleteObjects.push(d);
       }
     }
 
@@ -99,23 +109,29 @@ export class PinBallComponent implements OnInit {
 
 
     const tick = (): void => {
-      const ray = new THREE.Raycaster( ball.position,new THREE.Vector3(0,0,0).sub(ball.position).normalize());
-      const xIntersections = ray.intersectObjects(xObjects);
-      const zIntersections = ray.intersectObjects(zObjects);
-      const intersections = ray.intersectObjects(deleteObjects);
+      const ballRay = new THREE.Raycaster( ball.position,new THREE.Vector3(0,0,0).sub(ball.position).normalize());
+      const barRay = new THREE.Raycaster( bar.position,new THREE.Vector3(0,0,-40).sub(bar.position).normalize());
+      const intersections = ballRay.intersectObjects(deleteObjects);
+      const barIntersections = barRay.intersectObjects(xObjects);
 
-      if ( xIntersections.length > 0 ) {
+      if ( ball.position.x > 19.5 || ball.position.x < -19.5 ) {
         ballMoveAmout.x *= -1;
       }
-      if ( zIntersections.length > 0 ) {
+      if ( ball.position.z > 49.5 || ball.position.z < -49.5 ) {
         ballMoveAmout.z *= -1;
       }
 
       if ( intersections.length > 0 ) {
         ballMoveAmout.x *= -1;
         ballMoveAmout.z *= -1;
+
       }
 
+      if ( barIntersections.length > 0 ) {
+        barMoveAmout.x *= -1;
+      }
+
+      bar.position.x  += barMoveAmout.x
       ball.position.x += ballMoveAmout.x
       ball.position.z += ballMoveAmout.z
 
