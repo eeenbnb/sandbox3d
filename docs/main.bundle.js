@@ -616,7 +616,7 @@ var PinBallComponent = (function () {
         var bar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](barGeometry, barMaterial);
         bar.position.set(0, 1, -40);
         scene.add(bar);
-        deleteObjects.push(bar);
+        bar.visible = false;
         //foller
         {
             var geometry_1 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](40, 0, 100);
@@ -654,9 +654,19 @@ var PinBallComponent = (function () {
         for (var i = 0; i < 25; i++) {
             var geometry_2 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](1, 1, 1);
             var material_4 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xff0000, emissive: 0xff0000 });
-            for (var j = 0; j < 20; j++) {
+            for (var j = 0; j < 40; j++) {
                 var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry_2, material_4);
-                d.position.set(10 - j, 0.5, 40 - i);
+                d.position.set(19.5 - j, 0.5, 49 - i);
+                scene.add(d);
+                deleteObjects.push(d);
+            }
+        }
+        for (var i = 0; i < 40; i++) {
+            var geometry_3 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](1, 1, 1);
+            var material_5 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xff0000, emissive: 0xff0000 });
+            for (var j = 0; j < 20; j++) {
+                var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry_3, material_5);
+                d.position.set(9.5 - j, 0.5, 24 - i);
                 scene.add(d);
                 deleteObjects.push(d);
             }
@@ -673,13 +683,16 @@ var PinBallComponent = (function () {
                 ballMoveAmout.z *= -1;
             }
             if (intersections.length > 0) {
-                ballMoveAmout.x *= -1;
-                ballMoveAmout.z *= -1;
+                if (intersections[0].distance <= 0) {
+                    ballMoveAmout.x *= Math.random() > 0.5 ? -1 : 1;
+                    ballMoveAmout.z *= -1;
+                    intersections[0].object.visible = false;
+                }
             }
             if (barIntersections.length > 0) {
                 barMoveAmout.x *= -1;
             }
-            bar.position.x += barMoveAmout.x;
+            //bar.position.x  += barMoveAmout.x
             ball.position.x += ballMoveAmout.x;
             ball.position.z += ballMoveAmout.z;
             dg += 0.25;

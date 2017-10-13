@@ -59,7 +59,7 @@ export class PinBallComponent implements OnInit {
     const bar     = new THREE.Mesh(barGeometry, barMaterial);
     bar.position.set(0,1,-40);
     scene.add(bar);
-    deleteObjects.push(bar);
+    bar.visible = false;
     //foller
     {
       const geometry = new THREE.BoxGeometry(40,0,100)
@@ -97,9 +97,20 @@ export class PinBallComponent implements OnInit {
     for(var i=0;i<25;i++){
       const geometry = new THREE.BoxGeometry(1,1,1)
       const material = new THREE.MeshPhongMaterial({color:0xff0000,emissive:0xff0000});
+      for(var j=0;j<40;j++){
+        const d     = new THREE.Mesh(geometry, material);
+        d.position.set( 19.5 - j,0.5, 49 - i);
+        scene.add(d);
+        deleteObjects.push(d);
+      }
+    }
+
+    for(var i=0;i<40;i++){
+      const geometry = new THREE.BoxGeometry(1,1,1)
+      const material = new THREE.MeshPhongMaterial({color:0xff0000,emissive:0xff0000});
       for(var j=0;j<20;j++){
         const d     = new THREE.Mesh(geometry, material);
-        d.position.set( 10 - j,0.5, 40 - i);
+        d.position.set( 9.5 - j,0.5, 24 - i);
         scene.add(d);
         deleteObjects.push(d);
       }
@@ -122,16 +133,18 @@ export class PinBallComponent implements OnInit {
       }
 
       if ( intersections.length > 0 ) {
-        ballMoveAmout.x *= -1;
-        ballMoveAmout.z *= -1;
-
+        if(intersections[0].distance <= 0){
+          ballMoveAmout.x *= Math.random() > 0.5? -1:1;
+          ballMoveAmout.z *= -1;
+          intersections[0].object.visible = false;
+        }
       }
 
       if ( barIntersections.length > 0 ) {
         barMoveAmout.x *= -1;
       }
 
-      bar.position.x  += barMoveAmout.x
+      //bar.position.x  += barMoveAmout.x
       ball.position.x += ballMoveAmout.x
       ball.position.z += ballMoveAmout.z
 
