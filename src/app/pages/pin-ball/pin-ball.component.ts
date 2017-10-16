@@ -17,14 +17,15 @@ export class PinBallComponent implements OnInit {
     this.canvasAreaElement = this.canvasArea.nativeElement as Element;
     let rendererSize = this.canvasAreaElement.scrollWidth;
     const xObjects = [];
-    const zObjects = [];
+    const barObjects = [];
     var deleteObjects = [];
     var ballMoveAmout = {
       x:0.5,
       z:0.5
     };
     var barMoveAmout = {
-      x:2
+      x:0.0,
+      startD:0
     }
     var dg =0;
 
@@ -39,7 +40,7 @@ export class PinBallComponent implements OnInit {
 
     //camera
     const camera = new THREE.PerspectiveCamera(45, rendererSize / rendererSize, 1, 10000);
-    camera.position.set(0, 100, -120);
+    camera.position.set(0, 150, 0);
     camera.lookAt(new THREE.Vector3(0,0,0));
     scene.add(camera);
     //light
@@ -59,7 +60,7 @@ export class PinBallComponent implements OnInit {
     const bar     = new THREE.Mesh(barGeometry, barMaterial);
     bar.position.set(0,1,-40);
     scene.add(bar);
-    bar.visible = false;
+    barObjects.push(bar);
     //foller
     {
       const geometry = new THREE.BoxGeometry(40,0,100)
@@ -91,38 +92,50 @@ export class PinBallComponent implements OnInit {
       underBar.position.set(0,1,-50);
       scene.add(upBar);
       scene.add(underBar);
-      zObjects.push(upBar);
-      zObjects.push(underBar);
     }
-    for(var i=0;i<25;i++){
-      const geometry = new THREE.BoxGeometry(1,1,1)
+    for(var i=0;i<10;i++){
+      const geometry = new THREE.BoxGeometry(5,1,5)
       const material = new THREE.MeshPhongMaterial({color:0xff0000,emissive:0xff0000});
-      for(var j=0;j<40;j++){
+      for(var j=0;j<8;j++){
         const d     = new THREE.Mesh(geometry, material);
-        d.position.set( 19.5 - j,0.5, 49 - i);
-        scene.add(d);
-        deleteObjects.push(d);
-      }
-    }
-
-    for(var i=0;i<40;i++){
-      const geometry = new THREE.BoxGeometry(1,1,1)
-      const material = new THREE.MeshPhongMaterial({color:0xff0000,emissive:0xff0000});
-      for(var j=0;j<20;j++){
-        const d     = new THREE.Mesh(geometry, material);
-        d.position.set( 9.5 - j,0.5, 24 - i);
+        d.position.set( 17 - j*5, 0.5 , 47 - i*5 );
         scene.add(d);
         deleteObjects.push(d);
       }
     }
 
 
+    window.addEventListener('keydown',(e)=>{
+      barMoveAmout.startD = 0;
+      switch(e.code){
+        case "ArrowRight":
+            barMoveAmout.x = -1;
+          break;
+        case "ArrowLeft":
+            barMoveAmout.x = 1;
+          break;
+      }
+    });
+    window.addEventListener('keyup',(e)=>{
+      switch(e.code){
+        case "ArrowRight":
+        case "ArrowLeft":
+            barMoveAmout.startD = 1;
+        break;
+      }
+    });
+
+    renderer.domElement.addEventListener('click',()=>{
+      cancelAnimationFrame(this.animationFrame);
+      tick();
+    })
 
 
     const tick = (): void => {
       const ballRay = new THREE.Raycaster( ball.position,new THREE.Vector3(0,0,0).sub(ball.position).normalize());
       const barRay = new THREE.Raycaster( bar.position,new THREE.Vector3(0,0,-40).sub(bar.position).normalize());
       const intersections = ballRay.intersectObjects(deleteObjects);
+      const ballBarIntersections = ballRay.intersectObjects(barObjects);
       const barIntersections = barRay.intersectObjects(xObjects);
 
       if ( ball.position.x > 19.5 || ball.position.x < -19.5 ) {
@@ -133,18 +146,40 @@ export class PinBallComponent implements OnInit {
       }
 
       if ( intersections.length > 0 ) {
-        if(intersections[0].distance <= 0){
-          ballMoveAmout.x *= Math.random() > 0.5? -1:1;
+        if(intersections[0].distance < 2.5 + Math.abs(ballMoveAmout.x)){
+          ballMoveAmout.x *= -1;
           ballMoveAmout.z *= -1;
           intersections[0].object.visible = false;
         }
       }
-
-      if ( barIntersections.length > 0 ) {
-        barMoveAmout.x *= -1;
+      if ( ballBarIntersections.length > 0 ) {
+        if(ballBarIntersections[0].distance < 1){
+          ballMoveAmout.x  = ballMoveAmout.x >0 ?1:-1 * (Math.abs(barMoveAmout.x));
+          ballMoveAmout.z *= -1;
+        }
       }
 
-      //bar.position.x  += barMoveAmout.x
+      bar.position.x += barMoveAmout.x;
+
+      if(bar.position.x > 15){
+        bar.position.x = 15;
+      }
+      if(bar.position.x < -15){
+        bar.position.x = -15;
+      }
+
+      if(barMoveAmout.x > 0 && barMoveAmout.startD == 1){
+        barMoveAmout.x -= 0.1
+      }
+      if(barMoveAmout.x < 0 && barMoveAmout.startD == 1){
+        barMoveAmout.x += 0.1
+      }
+
+      if(barMoveAmout.x < 0.2  && barMoveAmout.x > -0.2 && barMoveAmout.startD == 1){
+        barMoveAmout.x = 0.0
+      }
+
+
       ball.position.x += ballMoveAmout.x
       ball.position.z += ballMoveAmout.z
 
@@ -157,7 +192,6 @@ export class PinBallComponent implements OnInit {
       this.animationFrame = requestAnimationFrame(tick);
       renderer.render(scene, camera);
     };
-    tick();
   }
   ngOnDestroy(){
     cancelAnimationFrame(this.animationFrame);

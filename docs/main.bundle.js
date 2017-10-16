@@ -246,7 +246,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".top{\r\n  width: 100%;\r\n  height: 200px;\r\n}\r\n.canvas{\r\n  width: 100%;\r\n  height: 100%;\r\n  height: 200px;\r\n  background-color: #FFF;\r\n  position: relative;\r\n  z-index: 100;\r\n}\r\n.fixed {\r\n  position: fixed;\r\n  top: -100px;\r\n}\r\n", ""]);
+exports.push([module.i, ".top{\r\n  width: 100%;\r\n  height: 200px;\r\n}\r\n.canvas{\r\n  width: 100%;\r\n  height: 100%;\r\n  height: 200px;\r\n  background-color: #FFF;\r\n  position: relative;\r\n  z-index: 100;\r\n}\r\n.fixed {\r\n  position: fixed;\r\n  top: -100px;\r\n}\r\n\r\n.title{\r\n  position: absolute;\r\n  width: 100%;\r\n  text-align: center;\r\n  height: 50px;\r\n  z-index: 100;\r\n  top:100px;\r\n}\r\n.title-text{\r\n  color: #FFFFFF;\r\n  font-size: 20px;\r\n\r\n}\r\n.blur {\r\n  background: #5F5F5F;\r\n  position: absolute;\r\n  top:-5px;\r\n  left: 25%;\r\n  width: 50%;\r\n  height: 50px;\r\n  z-index: 99;\r\n  -webkit-filter: blur(5px);\r\n  -moz-filter: blur(5px);\r\n  -o-filter: blur(5px);\r\n  -ms-filter: blur(5px);\r\n  filter: blur(5px);\r\n}\r\n", ""]);
 
 // exports
 
@@ -259,7 +259,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/top-area/top-area.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"top\">\r\n    <canvas #canvas appPageFixed class=\"canvas\"></canvas>\r\n</div>\r\n"
+module.exports = "<div class=\"top\">\r\n    <canvas #canvas appPageFixed class=\"canvas\"></canvas>\r\n    <!--div appPageFixed class=\"title\">\r\n      <div class=\"blur\"></div>\r\n      <p class=\"title-text\">hogehoge</p>\r\n    <div-->\r\n</div>\r\n"
 
 /***/ }),
 
@@ -578,14 +578,15 @@ var PinBallComponent = (function () {
         this.canvasAreaElement = this.canvasArea.nativeElement;
         var rendererSize = this.canvasAreaElement.scrollWidth;
         var xObjects = [];
-        var zObjects = [];
+        var barObjects = [];
         var deleteObjects = [];
         var ballMoveAmout = {
             x: 0.5,
             z: 0.5
         };
         var barMoveAmout = {
-            x: 2
+            x: 0.0,
+            startD: 0
         };
         var dg = 0;
         var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]();
@@ -598,7 +599,7 @@ var PinBallComponent = (function () {
         //scene.add( new THREE.AxisHelper(20) );
         //camera
         var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, rendererSize / rendererSize, 1, 10000);
-        camera.position.set(0, 100, -120);
+        camera.position.set(0, 150, 0);
         camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0));
         scene.add(camera);
         //light
@@ -616,7 +617,7 @@ var PinBallComponent = (function () {
         var bar = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](barGeometry, barMaterial);
         bar.position.set(0, 1, -40);
         scene.add(bar);
-        bar.visible = false;
+        barObjects.push(bar);
         //foller
         {
             var geometry_1 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](40, 0, 100);
@@ -648,33 +649,45 @@ var PinBallComponent = (function () {
             underBar.position.set(0, 1, -50);
             scene.add(upBar);
             scene.add(underBar);
-            zObjects.push(upBar);
-            zObjects.push(underBar);
         }
-        for (var i = 0; i < 25; i++) {
-            var geometry_2 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](1, 1, 1);
+        for (var i = 0; i < 10; i++) {
+            var geometry_2 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](5, 1, 5);
             var material_4 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xff0000, emissive: 0xff0000 });
-            for (var j = 0; j < 40; j++) {
+            for (var j = 0; j < 8; j++) {
                 var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry_2, material_4);
-                d.position.set(19.5 - j, 0.5, 49 - i);
+                d.position.set(17 - j * 5, 0.5, 47 - i * 5);
                 scene.add(d);
                 deleteObjects.push(d);
             }
         }
-        for (var i = 0; i < 40; i++) {
-            var geometry_3 = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](1, 1, 1);
-            var material_5 = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0xff0000, emissive: 0xff0000 });
-            for (var j = 0; j < 20; j++) {
-                var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry_3, material_5);
-                d.position.set(9.5 - j, 0.5, 24 - i);
-                scene.add(d);
-                deleteObjects.push(d);
+        window.addEventListener('keydown', function (e) {
+            barMoveAmout.startD = 0;
+            switch (e.code) {
+                case "ArrowRight":
+                    barMoveAmout.x = -1;
+                    break;
+                case "ArrowLeft":
+                    barMoveAmout.x = 1;
+                    break;
             }
-        }
+        });
+        window.addEventListener('keyup', function (e) {
+            switch (e.code) {
+                case "ArrowRight":
+                case "ArrowLeft":
+                    barMoveAmout.startD = 1;
+                    break;
+            }
+        });
+        renderer.domElement.addEventListener('click', function () {
+            cancelAnimationFrame(_this.animationFrame);
+            tick();
+        });
         var tick = function () {
             var ballRay = new __WEBPACK_IMPORTED_MODULE_1_three__["Raycaster"](ball.position, new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0).sub(ball.position).normalize());
             var barRay = new __WEBPACK_IMPORTED_MODULE_1_three__["Raycaster"](bar.position, new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, -40).sub(bar.position).normalize());
             var intersections = ballRay.intersectObjects(deleteObjects);
+            var ballBarIntersections = ballRay.intersectObjects(barObjects);
             var barIntersections = barRay.intersectObjects(xObjects);
             if (ball.position.x > 19.5 || ball.position.x < -19.5) {
                 ballMoveAmout.x *= -1;
@@ -683,16 +696,34 @@ var PinBallComponent = (function () {
                 ballMoveAmout.z *= -1;
             }
             if (intersections.length > 0) {
-                if (intersections[0].distance <= 0) {
-                    ballMoveAmout.x *= Math.random() > 0.5 ? -1 : 1;
+                if (intersections[0].distance < 2.5 + Math.abs(ballMoveAmout.x)) {
+                    ballMoveAmout.x *= -1;
                     ballMoveAmout.z *= -1;
                     intersections[0].object.visible = false;
                 }
             }
-            if (barIntersections.length > 0) {
-                barMoveAmout.x *= -1;
+            if (ballBarIntersections.length > 0) {
+                if (ballBarIntersections[0].distance < 1) {
+                    ballMoveAmout.x = ballMoveAmout.x > 0 ? 1 : -1 * (Math.abs(barMoveAmout.x));
+                    ballMoveAmout.z *= -1;
+                }
             }
-            //bar.position.x  += barMoveAmout.x
+            bar.position.x += barMoveAmout.x;
+            if (bar.position.x > 15) {
+                bar.position.x = 15;
+            }
+            if (bar.position.x < -15) {
+                bar.position.x = -15;
+            }
+            if (barMoveAmout.x > 0 && barMoveAmout.startD == 1) {
+                barMoveAmout.x -= 0.1;
+            }
+            if (barMoveAmout.x < 0 && barMoveAmout.startD == 1) {
+                barMoveAmout.x += 0.1;
+            }
+            if (barMoveAmout.x < 0.2 && barMoveAmout.x > -0.2 && barMoveAmout.startD == 1) {
+                barMoveAmout.x = 0.0;
+            }
             ball.position.x += ballMoveAmout.x;
             ball.position.z += ballMoveAmout.z;
             dg += 0.25;
@@ -702,7 +733,6 @@ var PinBallComponent = (function () {
             _this.animationFrame = requestAnimationFrame(tick);
             renderer.render(scene, camera);
         };
-        tick();
     };
     PinBallComponent.prototype.ngOnDestroy = function () {
         cancelAnimationFrame(this.animationFrame);
