@@ -90,6 +90,7 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_page_event_page_event_service__ = __webpack_require__("../../../../../src/app/services/page-event/page-event.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__directives_page_animation_page_animation_directive__ = __webpack_require__("../../../../../src/app/directives/page-animation/page-animation.directive.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__directives_page_fixed_page_fixed_directive__ = __webpack_require__("../../../../../src/app/directives/page-fixed/page-fixed.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_posteffect_posteffect_component__ = __webpack_require__("../../../../../src/app/pages/posteffect/posteffect.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -108,10 +109,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var appRoutes = [
     { path: '', component: __WEBPACK_IMPORTED_MODULE_6__pages_home_home_component__["a" /* HomeComponent */] },
     { path: '3dview', component: __WEBPACK_IMPORTED_MODULE_8__pages_view_3d_area_view_3d_area_component__["a" /* View3dAreaComponent */] },
     { path: 'pinball', component: __WEBPACK_IMPORTED_MODULE_7__pages_pin_ball_pin_ball_component__["a" /* PinBallComponent */] },
+    { path: 'posteffect', component: __WEBPACK_IMPORTED_MODULE_12__pages_posteffect_posteffect_component__["a" /* PosteffectComponent */] },
 ];
 var AppModule = (function () {
     function AppModule() {
@@ -129,7 +132,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_5__components_top_area_top_area_component__["a" /* TopAreaComponent */],
             __WEBPACK_IMPORTED_MODULE_11__directives_page_fixed_page_fixed_directive__["a" /* PageFixedDirective */],
             __WEBPACK_IMPORTED_MODULE_11__directives_page_fixed_page_fixed_directive__["b" /* PageFixedSideBarDirective */],
-            __WEBPACK_IMPORTED_MODULE_7__pages_pin_ball_pin_ball_component__["a" /* PinBallComponent */]
+            __WEBPACK_IMPORTED_MODULE_7__pages_pin_ball_pin_ball_component__["a" /* PinBallComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__pages_posteffect_posteffect_component__["a" /* PosteffectComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -204,6 +208,10 @@ var SideBarComponent = (function () {
             {
                 link: "./pinball",
                 name: "3D/pinball"
+            },
+            {
+                link: "./posteffect",
+                name: "3D/posteffect"
             },
         ];
     }
@@ -487,7 +495,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div appPageAnimation>\r\n  <p>\r\n    This page is testing to WebGL by eee_nbnb.\r\n  </p>\r\n  <p>\r\n    Thank you!!\r\n  </p>\r\n  <p style=\"height:1000px\">\r\n    すごく下に長いテキスト\r\n  </p>\r\n</div>\r\n"
+module.exports = "<div appPageAnimation>\r\n  <p>\r\n    This page is testing to WebGL by eee_nbnb.\r\n  </p>\r\n  <p>\r\n    Thank you!!\r\n  </p>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -754,6 +762,122 @@ PinBallComponent = __decorate([
 
 var _a;
 //# sourceMappingURL=pin-ball.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/pages/posteffect/posteffect.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pages/posteffect/posteffect.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div appPageAnimation>\n  <p>This is posteffect sandbox.[WIP]</p>\n  <div style=\"padding:10px\">\n    <div #canvasArea style=\"width:75%;\"></div>\n  </div>\n<div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pages/posteffect/posteffect.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PosteffectComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_three__ = __webpack_require__("../../../../three/build/three.module.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+window.THREE = __WEBPACK_IMPORTED_MODULE_1_three__;
+__webpack_require__("../../../../three/examples/js/controls/PointerLockControls.js");
+var PosteffectComponent = (function () {
+    function PosteffectComponent() {
+    }
+    PosteffectComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.canvasAreaElement = this.canvasArea.nativeElement;
+        var rendererSize = this.canvasAreaElement.scrollWidth;
+        var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]();
+        var boxObjects = [];
+        renderer.setSize(rendererSize, rendererSize);
+        this.canvasAreaElement.appendChild(renderer.domElement);
+        //scene
+        var scene = new __WEBPACK_IMPORTED_MODULE_1_three__["Scene"]();
+        scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0xf0f0f0);
+        //scene.add( new THREE.GridHelper( 1000, 1000 ) );
+        //scene.add( new THREE.AxisHelper(20) );
+        //camera
+        var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, rendererSize / rendererSize, 1, 100000);
+        camera.position.set(0, -10, -25);
+        camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0));
+        scene.add(camera);
+        //light
+        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AmbientLight"](0xF0F0F0));
+        for (var i = 0; i < 100; i++) {
+            var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.5, 0, 0.5);
+            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: 0xff0000 });
+            var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
+            d.position.set(0, i / 10, 0);
+            scene.add(d);
+            boxObjects.push(d);
+        }
+        var dg = 0;
+        var tick = function () {
+            _this.animationFrame = requestAnimationFrame(tick);
+            dg += 0.125;
+            //camera.position.x = Math.cos(THREE.Math.degToRad(dg)) * 100;
+            //camera.position.z = Math.sin(THREE.Math.degToRad(dg)) * 100;
+            camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 5, 0));
+            boxObjects.forEach(function (v, i) {
+                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt(boxObjects.length - Math.pow(i / 10, 2));
+                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt(boxObjects.length - Math.pow(i / 10, 2));
+                ;
+            });
+            renderer.render(scene, camera);
+        };
+        tick();
+    };
+    PosteffectComponent.prototype.ngOnDestroy = function () {
+        cancelAnimationFrame(this.animationFrame);
+        this.canvasAreaElement.removeEventListener('click', function (e) { console.log(e); });
+    };
+    return PosteffectComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ViewChild */])('canvasArea'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ElementRef */]) === "function" && _a || Object)
+], PosteffectComponent.prototype, "canvasArea", void 0);
+PosteffectComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+        selector: 'app-posteffect',
+        template: __webpack_require__("../../../../../src/app/pages/posteffect/posteffect.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/pages/posteffect/posteffect.component.css")]
+    }),
+    __metadata("design:paramtypes", [])
+], PosteffectComponent);
+
+var _a;
+//# sourceMappingURL=posteffect.component.js.map
 
 /***/ }),
 

@@ -13,11 +13,13 @@ import { View3dAreaComponent } from './pages/view-3d-area/view-3d-area.component
 import { PageEventService } from './services/page-event/page-event.service';
 import { PageAnimationDirective } from './directives/page-animation/page-animation.directive';
 import { PageFixedDirective,PageFixedSideBarDirective } from './directives/page-fixed/page-fixed.directive';
+import { PosteffectComponent } from './pages/posteffect/posteffect.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: '3dview', component: View3dAreaComponent },
   { path: 'pinball', component: PinBallComponent },
+  { path: 'posteffect', component: PosteffectComponent },
 ];
 
 
@@ -31,7 +33,8 @@ const appRoutes: Routes = [
     TopAreaComponent,
     PageFixedDirective,
     PageFixedSideBarDirective,
-    PinBallComponent
+    PinBallComponent,
+    PosteffectComponent
   ],
   imports: [
     BrowserModule,
