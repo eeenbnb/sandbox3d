@@ -819,39 +819,52 @@ var PosteffectComponent = (function () {
         var rendererSize = this.canvasAreaElement.scrollWidth;
         var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]();
         var boxObjects = [];
+        var upBoxObjects = [];
         renderer.setSize(rendererSize, rendererSize);
         this.canvasAreaElement.appendChild(renderer.domElement);
         //scene
         var scene = new __WEBPACK_IMPORTED_MODULE_1_three__["Scene"]();
-        scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0xf0f0f0);
+        scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0x5e5e5e);
         //scene.add( new THREE.GridHelper( 1000, 1000 ) );
-        //scene.add( new THREE.AxisHelper(20) );
+        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AxisHelper"](20));
         //camera
         var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, rendererSize / rendererSize, 1, 100000);
-        camera.position.set(0, -10, -25);
+        camera.position.set(5, 50, -50);
         camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0));
         scene.add(camera);
-        //light
+        //light1
         scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AmbientLight"](0xF0F0F0));
         for (var i = 0; i < 100; i++) {
-            var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.5, 0, 0.5);
+            var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.5, 0.5, 0.5);
             var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: 0xff0000 });
             var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
             d.position.set(0, i / 10, 0);
             scene.add(d);
             boxObjects.push(d);
         }
+        for (var i = 0; i < boxObjects.length; i++) {
+            var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.5, 0.5, 0.5);
+            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: 0xff0000 });
+            var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
+            d.position.set(0, (boxObjects.length + i) / 10, 0);
+            scene.add(d);
+            upBoxObjects.push(d);
+        }
         var dg = 0;
         var tick = function () {
             _this.animationFrame = requestAnimationFrame(tick);
             dg += 0.125;
-            //camera.position.x = Math.cos(THREE.Math.degToRad(dg)) * 100;
-            //camera.position.z = Math.sin(THREE.Math.degToRad(dg)) * 100;
+            camera.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 50;
+            camera.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 50;
+            camera.position.y = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 50;
             camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 5, 0));
             boxObjects.forEach(function (v, i) {
-                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt(boxObjects.length - Math.pow(i / 10, 2));
-                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt(boxObjects.length - Math.pow(i / 10, 2));
-                ;
+                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow((boxObjects.length - i) / 10, 2)));
+                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow((boxObjects.length - i) / 10, 2)));
+            });
+            upBoxObjects.forEach(function (v, i) {
+                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * (i + boxObjects.length))) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow(i / 10, 2)));
+                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * (i + boxObjects.length))) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow(i / 10, 2)));
             });
             renderer.render(scene, camera);
         };
