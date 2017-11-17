@@ -786,7 +786,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/pages/posteffect/posteffect.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div appPageAnimation>\n  <p>This is posteffect sandbox.[WIP]</p>\n  <div style=\"padding:10px\">\n    <div #canvasArea style=\"width:75%;\"></div>\n  </div>\n<div>\n"
+module.exports = "<div appPageAnimation>\n  <p>This is posteffect sandbox.</p>\n  <div style=\"padding:10px\">\n    <div #canvasArea style=\"width:75%;\"></div>\n  </div>\n<div>\n"
 
 /***/ }),
 
@@ -809,7 +809,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 window.THREE = __WEBPACK_IMPORTED_MODULE_1_three__;
-__webpack_require__("../../../../three/examples/js/controls/PointerLockControls.js");
+__webpack_require__("../../../../three/examples/js/postprocessing/EffectComposer.js");
+__webpack_require__("../../../../three/examples/js/postprocessing/RenderPass.js");
+__webpack_require__("../../../../three/examples/js/shaders/CopyShader.js");
+__webpack_require__("../../../../three/examples/js/postprocessing/MaskPass.js");
+__webpack_require__("../../../../three/examples/js/postprocessing/ShaderPass.js");
+__webpack_require__("../../../../three/examples/js/shaders/DotScreenShader.js");
+__webpack_require__("../../../../three/examples/js/shaders/RGBShiftShader.js");
+__webpack_require__("../../../../three/examples/js/postprocessing/BloomPass.js");
+__webpack_require__("../../../../three/examples/js/shaders/ConvolutionShader.js");
 var PosteffectComponent = (function () {
     function PosteffectComponent() {
     }
@@ -817,26 +825,26 @@ var PosteffectComponent = (function () {
         var _this = this;
         this.canvasAreaElement = this.canvasArea.nativeElement;
         var rendererSize = this.canvasAreaElement.scrollWidth;
-        var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]();
+        var renderer = new __WEBPACK_IMPORTED_MODULE_1_three__["WebGLRenderer"]({ antialias: true });
         var boxObjects = [];
         var upBoxObjects = [];
         renderer.setSize(rendererSize, rendererSize);
         this.canvasAreaElement.appendChild(renderer.domElement);
         //scene
         var scene = new __WEBPACK_IMPORTED_MODULE_1_three__["Scene"]();
-        scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0x5e5e5e);
+        scene.background = new __WEBPACK_IMPORTED_MODULE_1_three__["Color"](0xf0f0f0);
         //scene.add( new THREE.GridHelper( 1000, 1000 ) );
-        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AxisHelper"](20));
+        //scene.add( new THREE.AxisHelper(20) );
         //camera
-        var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, rendererSize / rendererSize, 1, 100000);
+        var camera = new __WEBPACK_IMPORTED_MODULE_1_three__["PerspectiveCamera"](45, rendererSize / rendererSize, 1, 10000);
         camera.position.set(5, 50, -50);
         camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 0, 0));
         scene.add(camera);
         //light1
-        scene.add(new __WEBPACK_IMPORTED_MODULE_1_three__["AmbientLight"](0xF0F0F0));
+        //scene.add( new THREE.AmbientLight( 0xF0F0F0 ) );
         for (var i = 0; i < 100; i++) {
             var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.5, 0.5, 0.5);
-            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: 0xff0000 });
+            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: Math.random() * 0xffffff });
             var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
             d.position.set(0, i / 10, 0);
             scene.add(d);
@@ -844,29 +852,54 @@ var PosteffectComponent = (function () {
         }
         for (var i = 0; i < boxObjects.length; i++) {
             var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.5, 0.5, 0.5);
-            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: 0xff0000 });
+            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: Math.random() * 0xffffff, emissive: Math.random() * 0xffffff });
             var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
             d.position.set(0, (boxObjects.length + i) / 10, 0);
             scene.add(d);
             upBoxObjects.push(d);
         }
+        for (var i = 0; i < 500; i++) {
+            var geometry = new __WEBPACK_IMPORTED_MODULE_1_three__["BoxGeometry"](0.1, 0.1, 0.1);
+            var material = new __WEBPACK_IMPORTED_MODULE_1_three__["MeshPhongMaterial"]({ color: 0x000000, emissive: Math.random() * 0x000000 });
+            var d = new __WEBPACK_IMPORTED_MODULE_1_three__["Mesh"](geometry, material);
+            d.position.set((Math.random() - 0.5) * 50, (Math.random() - 0.5) * 50, (Math.random() - 0.5) * 50);
+            scene.add(d);
+        }
+        //effect
+        var composer = new window.THREE.EffectComposer(renderer);
+        composer.setSize(rendererSize, rendererSize);
+        composer.addPass(new window.THREE.RenderPass(scene, camera));
+        composer.addPass(new window.THREE.BloomPass(1.0, 25, 1.0, 512));
+        var effectDotScreen = new window.THREE.ShaderPass(window.THREE.DotScreenShader);
+        effectDotScreen.uniforms['scale'].value = 2;
+        //composer.addPass( effectDotScreen );
+        var effectRGBShift = new window.THREE.ShaderPass(window.THREE.RGBShiftShader);
+        effectRGBShift.uniforms['amount'].value = 0.01;
+        effectRGBShift.renderToScreen = true;
+        composer.addPass(effectRGBShift);
+        //var toScreen = new (window as any).THREE.ShaderPass( (window as any).THREE.CopyShader );
+        //toScreen.renderToScreen = true;
+        //composer.addPass( toScreen );
         var dg = 0;
+        var circleDg = 0;
         var tick = function () {
             _this.animationFrame = requestAnimationFrame(tick);
-            dg += 0.125;
-            camera.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 50;
-            camera.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 50;
-            camera.position.y = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * 5)) * 50;
-            camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, 5, 0));
+            dg += 1;
+            circleDg += 0.025;
+            camera.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 30;
+            camera.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 30;
+            camera.position.y = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg)) * 30;
+            camera.lookAt(new __WEBPACK_IMPORTED_MODULE_1_three__["Vector3"](0, boxObjects.length / 10, 0));
             boxObjects.forEach(function (v, i) {
-                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow((boxObjects.length - i) / 10, 2)));
-                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * i)) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow((boxObjects.length - i) / 10, 2)));
+                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(circleDg * i)) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow((boxObjects.length - i) / 10, 2)));
+                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(circleDg * i)) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow((boxObjects.length - i) / 10, 2)));
             });
             upBoxObjects.forEach(function (v, i) {
-                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * (i + boxObjects.length))) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow(i / 10, 2)));
-                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(dg * (i + boxObjects.length))) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow(i / 10, 2)));
+                v.position.x = Math.cos(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(circleDg * (i + boxObjects.length))) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow(i / 10, 2)));
+                v.position.z = Math.sin(__WEBPACK_IMPORTED_MODULE_1_three__["Math"].degToRad(circleDg * (i + boxObjects.length))) * Math.sqrt((Math.pow(boxObjects.length / 10, 2) - Math.pow(i / 10, 2)));
             });
-            renderer.render(scene, camera);
+            composer.render();
+            //renderer.render(scene, camera);
         };
         tick();
     };
