@@ -27,7 +27,7 @@ export class View3dAreaComponent implements OnInit,OnDestroy {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color( 0xf0f0f0 );
     scene.add( new THREE.GridHelper( 1000, 1000 ) );
-    scene.add( new THREE.AxisHelper(20) );
+    scene.add( new (THREE as any).AxisHelper(20) );
     //camera
     const camera = new THREE.PerspectiveCamera(45, rendererSize / rendererSize, 1, 100000);
     camera.position.set(0, 1.7, -1.5);
@@ -46,12 +46,12 @@ export class View3dAreaComponent implements OnInit,OnDestroy {
     tick();
 
     this.canvasAreaElement.addEventListener( 'click', (event)=>{
-      const element:Element = this.canvasAreaElement;
+      const element:any = this.canvasAreaElement;
       element.requestPointerLock = element.requestPointerLock;
 		  element.requestPointerLock();
     }, false );
     document.addEventListener( 'pointerlockchange', (e)=>{
-      if(document.pointerLockElement == this.canvasAreaElement){
+      if((document as any).pointerLockElement == this.canvasAreaElement){
         controls.enabled = true;
       }else{
         controls.enabled = false;

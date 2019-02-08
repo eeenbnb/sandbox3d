@@ -21,7 +21,7 @@ export class TopAreaComponent implements OnInit {
     let canvas = (this.canvasElement.nativeElement as Element);
     var pathArray = [];
     var pathAddNumber = [];
-    for(var i=0;i<100;i++){
+    for(var i=0;i<canvas.scrollWidth/10;i++){
       let radius = Math.random() * 35;
       const path = new Path.Circle({
         center: [Math.random() * canvas.scrollWidth, Math.random() * canvas.scrollHeight],
@@ -36,7 +36,7 @@ export class TopAreaComponent implements OnInit {
       };
     }
     setInterval(()=>{
-      for(var i=0;i<100;i++){
+      for(var i=0;i<canvas.scrollWidth/10;i++){
         if(canvas.scrollHeight < pathArray[i].position.y || pathArray[i].position.y < 0){
           pathAddNumber[i].y *= -1;
         }
