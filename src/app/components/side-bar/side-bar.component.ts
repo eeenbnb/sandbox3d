@@ -26,6 +26,10 @@ export class SideBarComponent implements OnInit {
       link:"./posteffect",
       name:"3D/posteffect"
     },
+    {
+      link:"./movie1",
+      name:"3D/movie1"
+    },
   ]
 
 

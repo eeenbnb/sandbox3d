@@ -14,12 +14,14 @@ import { PageEventService } from './services/page-event/page-event.service';
 import { PageAnimationDirective } from './directives/page-animation/page-animation.directive';
 import { PageFixedDirective,PageFixedSideBarDirective } from './directives/page-fixed/page-fixed.directive';
 import { PosteffectComponent } from './pages/posteffect/posteffect.component';
+import { MovieOneComponent } from './pages/movie-one/movie-one.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: '3dview', component: View3dAreaComponent },
   { path: 'pinball', component: PinBallComponent },
   { path: 'posteffect', component: PosteffectComponent },
+  { path: 'movie1', component: MovieOneComponent },
 ];
 
 
@@ -34,7 +36,8 @@ const appRoutes: Routes = [
     PageFixedDirective,
     PageFixedSideBarDirective,
     PinBallComponent,
-    PosteffectComponent
+    PosteffectComponent,
+    MovieOneComponent
   ],
   imports: [
     BrowserModule,

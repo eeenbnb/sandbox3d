@@ -1,5 +1,6 @@
 import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import { PaperScope, Project, Path, Point,view,Symbol } from 'paper';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-top-area',
@@ -35,18 +36,20 @@ export class TopAreaComponent implements OnInit {
         y:Math.random()
       };
     }
-    setInterval(()=>{
-      for(var i=0;i<canvas.scrollWidth/10;i++){
-        if(canvas.scrollHeight < pathArray[i].position.y || pathArray[i].position.y < 0){
-          pathAddNumber[i].y *= -1;
+    const result = interval(10).subscribe(
+      ()=>{
+        for(var i=0;i<canvas.scrollWidth/10;i++){
+          if(canvas.scrollHeight < pathArray[i].position.y || pathArray[i].position.y < 0){
+            pathAddNumber[i].y *= -1;
+          }
+          if(pathArray[i].position.x > canvas.scrollWidth || pathArray[i].position.x < 0){
+            pathAddNumber[i].x *= -1;
+          }
+          pathArray[i].position.y += pathAddNumber[i].y;
+          pathArray[i].position.x += pathAddNumber[i].x;
         }
-        if(pathArray[i].position.x > canvas.scrollWidth || pathArray[i].position.x < 0){
-          pathAddNumber[i].x *= -1;
-        }
-        pathArray[i].position.y += pathAddNumber[i].y;
-        pathArray[i].position.x += pathAddNumber[i].x;
       }
-    },1);
+    )
 
   }
 
